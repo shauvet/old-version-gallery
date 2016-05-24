@@ -31,6 +31,36 @@ html, body {
   overflow: hidden;
 
   background-color: #ddd;
+
+  @at-root {
+    .img-figure {
+      position: absolute;
+
+      widows: 320px;
+      height: 360px;
+      margin: 0;
+      padding: 40px;
+
+      background-color: #fff;
+
+      box-sizing: border-box;;
+    }
+
+    figcaption {
+      text-align: center;
+
+      .img-title {
+        margin: 20px 0 0 0;
+
+        color: #a7a0a2;
+        font-size: 16px;
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+  }
 }
 
 /* img-end */
