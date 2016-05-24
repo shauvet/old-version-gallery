@@ -57,12 +57,12 @@ var GalleryByReactApp = React.createClass({
       left: 0,
       right: 0
     },
-    hPosRange: {
+    hPosRange: { //水平方向取值范围
       leftSecX: [0, 0],
       rightSecX: [0, 0],
       y: [0, 0]
     },
-    vPosRange: {
+    vPosRange: { //垂直方向取值范围
       x: [0, 0],
       topY: [0, 0]
     }
@@ -73,7 +73,7 @@ var GalleryByReactApp = React.createClass({
   * @param centerIndex指定居中排布哪个图片
   */
   rearrange: function (centerIndex) {
-    var imgsArrangeArr = this.stage.imgsArrangeArr,
+    var imgsArrangeArr = this.state.imgsArrangeArr,
         Constant = this.Constant,
         centerPos = Constant.centerPos,
         hPosRange = Constant.hPosRange,
@@ -118,7 +118,7 @@ var GalleryByReactApp = React.createClass({
 
           imgsArrangeArr[i].pos = {
             top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
-            left: getRangeRandom(hPosRangeLORX[0]. hPosRangeLORX[1])
+            left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
           };
         }
 
@@ -148,6 +148,7 @@ var GalleryByReactApp = React.createClass({
 
   // 组件加载后，为每张照片计算其位置的范围
   componentDidMount: function () {
+
     // 拿到舞台大小
     var stageDOM = React.findDOMNode(this.refs.stage),
         stageW = stageDOM.scrollWidth,
