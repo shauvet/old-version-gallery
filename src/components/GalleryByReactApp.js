@@ -207,15 +207,12 @@ var GalleryByReactApp = React.createClass({
     return (
         <section className="stage" ref="stage">
             <section className="img-sec">
-<<<<<<< HEAD
             </section>
             <nav className="controller-nav">
-=======
               {imgFigures}
-            </section>
+            </nav>
             <nav className="controller-nav">
               {controllerUnits}
->>>>>>> b086747d28d27d51f50fa0a675f1a656e99ed176
             </nav>
         </section>
     );
