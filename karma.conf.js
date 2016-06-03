@@ -9,16 +9,12 @@ module.exports = function (config) {
     files: [
       'test/helpers/pack/**/*.js',
       'test/helpers/react/**/*.js',
-      'test/spec/components/**/*.js',
-      'test/spec/stores/**/*.js',
-      'test/spec/actions/**/*.js'
+      'test/spec/components/**/*.js'
     ],
     preprocessors: {
       'test/helpers/createComponent.js': ['webpack'],
       'test/spec/components/**/*.js': ['webpack'],
-      'test/spec/components/**/*.jsx': ['webpack'],
-      'test/spec/stores/**/*.js': ['webpack'],
-      'test/spec/actions/**/*.js': ['webpack']
+      'test/spec/components/**/*.jsx': ['webpack']
     },
     webpack: {
       cache: true,
@@ -37,6 +33,9 @@ module.exports = function (config) {
           loader: 'babel-loader',
           exclude: /node_modules/
         }, {
+          test: /\.sass/,
+          loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
+        }, {
           test: /\.css$/,
           loader: 'style-loader!css-loader'
         }, {
@@ -51,8 +50,6 @@ module.exports = function (config) {
         alias: {
           'styles': path.join(process.cwd(), './src/styles/'),
           'components': path.join(process.cwd(), './src/components/'),
-          'stores': '../../../src/stores/',
-          'actions': '../../../src/actions/',
           'helpers': path.join(process.cwd(), './test/helpers/')
         }
       }
