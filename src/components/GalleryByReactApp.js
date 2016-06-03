@@ -25,12 +25,12 @@ imageDatas = (function genImageURL(imageDatasArr) {
 var GalleryByReactApp = React.createClass({
   render: function() {
     return (
-      <section className="stage">
-        <section className="img-sec">
+        <section className="stage" ref="stage">
+            <section className="img-sec">
+            </section>
+            <nav className="controller-nav">
+            </nav>
         </section>
-        <nav className="controller-nav">
-        </nav>
-      </section>
     );
   }
 });
