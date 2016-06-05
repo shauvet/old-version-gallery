@@ -37,6 +37,23 @@ function get30DegRandom() {
 }
 
 var ImgFigure = React.createClass({
+
+  /*
+  * imgFigure的点击处理
+  */
+  handleClick: function (e) {
+
+    if (this.props.arrange.isCenter) {
+      this.props.inverse();
+    } else {
+      this.props.center();
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+
+  },
+
   render: function () {
 
     var styleObj = {};
@@ -53,11 +70,23 @@ var ImgFigure = React.createClass({
       }.bind(this));
     }
 
+    if (this.props.arrange.isCenter) {
+      styleObj.zIndex = 11;
+    }
+
+    var imgFigureClassName = 'img-figure';
+        imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
+
     return (
-        <figure className="img-figure" style={styleObj}>
+        <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
           <img src={this.props.data.imageURL} alt={this.props.data.title}/>
           <figcaption>
             <h2 className="img-title">{this.props.data.title}</h2>
+            <div className="img-back" onClick={this.handleClick}>
+              <p>
+                {this.props.data.desc}
+              </p>
+            </div>
           </figcaption>
         </figure>
       );
@@ -83,6 +112,24 @@ var GalleryByReactApp = React.createClass({
   },
 
   /*
+  * 翻转图片
+  * @param index 输入当前被执行inverse操作的图片对应的图片信息数组的index
+  * @return {Function} 闭包函数，return一个真正待呗执行的函数
+  */
+  inverse: function (index) {
+    return function () {
+      var imgsArrangeArr = this.state.imgsArrangeArr;
+
+      imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+
+      this.setState({
+        imgsArrangeArr: imgsArrangeArr
+      });
+    }.bind(this);
+  },
+
+
+  /*
   * 重新布局所有图片，
   * @param centerIndex指定居中排布哪个图片
   */
@@ -104,11 +151,12 @@ var GalleryByReactApp = React.createClass({
 
         imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 
-        //居中centerIndex的图片
-        imgsArrangeCenterArr[0].pos = centerPos;
-
-        //居中图片不需要旋转
-        imgsArrangeCenterArr[0].rotate = 0;
+        //居中centerIndex的图片,居中图片不需要旋转
+        imgsArrangeCenterArr[0] = {
+          pos: centerPos,
+          rotate: 0,
+          isCenter: true
+        };
 
         //取出布局上侧的图片的状态信息
         topImgSpliceIndex = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
@@ -121,7 +169,8 @@ var GalleryByReactApp = React.createClass({
             top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]),
             left: getRangeRandom(vPosRangeX[0], vPosRangeX[1])
             },
-            rotate: get30DegRandom()
+            rotate: get30DegRandom(),
+            isCenter: false
           };
         });
 
@@ -141,7 +190,8 @@ var GalleryByReactApp = React.createClass({
               top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
               left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
             },
-            rotate: get30DegRandom()
+            rotate: get30DegRandom(),
+            isCenter: false
           };
         }
 
@@ -156,6 +206,17 @@ var GalleryByReactApp = React.createClass({
         });
   },
 
+  /*
+  * 利用rearrange函数居中对应index的图片
+  * @param index 需要被居中的图片的index
+  * @return {Function}
+  */
+  center: function(index) {
+    return function() {
+      this.rearrange(index);
+    }.bind(this);
+  },
+
   getInitialState: function () {
     return {
       imgsArrangeArr: [
@@ -164,7 +225,11 @@ var GalleryByReactApp = React.createClass({
             left: '0',
             top: '0'
           }
-        }*/
+        },
+        rotate: 0,  //旋转角度
+        isInverse: false,  //表示imgfigure正反面
+        isCenter: false,  //图片是否居中
+        */
       ]
     };
   },
@@ -222,11 +287,13 @@ var GalleryByReactApp = React.createClass({
             left: 0,
             top: 0
           },
-          rotate: 0
+          rotate: 0,
+          isInverse: false,
+          isCenter: false
         };
       }
 
-      imgFigures.push(<ImgFigure data={value} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]}/>);
+      imgFigures.push(<ImgFigure data={value} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
     }.bind(this));
 
     return (
